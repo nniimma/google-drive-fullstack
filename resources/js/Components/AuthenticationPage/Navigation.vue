@@ -4,6 +4,7 @@
             <img src="/icons/logo.svg" alt="logo">
             Google Drive
             </Link>
+            <!-- <pre>{{ $page }}</pre> -->
          <div class="px-3">
             <CreateNewDropDown/>
             <div class="py-3 mt-5 p-2 rounded border border-gray-300">
