@@ -6,15 +6,11 @@
             </Link>
          <div class="px-3">
             <CreateNewDropDown/>
-
-            <div class="py-3">
-                <NavLink
-                :href="route('files.index')" :active="$page.props.route_name == 'files.index'">
-                    My Files
-                </NavLink>
-                <!-- <NavLink :href="route('files.sharedWithMe')" :active="$page.props.route_name == 'files.sharedWithMe'">Shared with me</NavLink>
-                <NavLink :href="route('files.sharedByMe')" :active="$page.props.route_name == 'files.sharedByMe'">Shared by me</NavLink>
-                <NavLink :href="route('trash')" :active="$page.props.route_name == 'trash'">Trash</NavLink> -->
+            <div class="py-3 mt-5 p-2 rounded border border-gray-300">
+                <nav-link :href="route('files.index')" :active="$page.props.auth.route_name == 'files.index'">My Files</nav-link>
+                <NavLink :href="route('dashboard')" :active="$page.props.auth.route_name == 'files.sharedWithMe'">Shared with me</NavLink>
+                <NavLink :href="route('dashboard')" :active="$page.props.auth.route_name == 'files.sharedByMe'">Shared by me</NavLink>
+                <nav-link :href="route('dashboard')" :active="$page.props.auth.route_name == 'trash'">Trash</nav-link>
             </div>
          </div>
     </nav>
