@@ -5,7 +5,7 @@
                 npm install @headlessui/vue@latest 
             -->
         <MenuButton
-            class="flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+            class="flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-gray-300 hover:bg-gray-500 hover:text-gray-100">
             Create New
         </MenuButton>
 
@@ -15,7 +15,8 @@
             <MenuItems
                 class="w-full absolute left-0 mt-2 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div class="px-1 py-1">
-                    <MenuItem v-slot="{ active }">
+                    <!-- <MenuItem v-slot="{ active }"> -->
+                    <MenuItem>
                     <a href="#" @click.prevent="showCreateFolderModal" class="text-gray-700 block px-4 py-2 text-sm">New Folder</a>
                     </MenuItem>
                 </div>
@@ -27,7 +28,6 @@
         </transition>
     </Menu>
 
-    <create-folder-modal v-model="createFolderModal"/>
 </template>
 
 <script setup>
