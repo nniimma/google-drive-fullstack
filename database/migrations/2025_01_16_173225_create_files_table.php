@@ -16,6 +16,8 @@ return new class extends Migration
             $table->id();
             $table->string('name', 1024);
             $table->string('path', 1024)->nullable();
+            // https://github.com/lazychaser/laravel-nestedset
+            // composer require kalnoy/nestedset
             $table->nestedSet();
             $table->boolean('is_folder');
             $table->string('mime')->nullable();
