@@ -4,7 +4,7 @@
         <div class="mt-6">
             <input-label for="folderName" value="Folder Name" />
 
-            <text-input ref="folderNameInput" type="text" id="folderName" v-model="form.name" class="mt-1 block w-full"
+            <text-input autofocus ref="folderNameInput" type="text" id="folderName" v-model="form.name" class="mt-1 block w-full"
                 :class="form.errors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''"
                 placeholder="New Folder" @keyup.enter="createFolder" />
 
@@ -24,7 +24,8 @@
     // Imports
     import {
         ref,
-        watch
+        watch,
+        nextTick 
     } from 'vue';
     import InputLabel from '@/Components/InputLabel.vue';
     import TextInput from '@/Components/TextInput.vue';
@@ -34,12 +35,17 @@
     import {
         useForm
     } from "@inertiajs/vue3";
+    import {
+        useToast
+    } from 'primevue/usetoast';
 
     // Uses
     const form = useForm({
         name: '',
-        parent_id: null
-    })
+        // parent_id: null
+    });
+
+    const toast = useToast();
 
     // Props & Emits
     const props = defineProps({
@@ -49,10 +55,11 @@
         }
     });
 
-    const emit = defineEmits(['update-folder-dialog']); 
+    const emit = defineEmits(['update-folder-dialog']);
 
     // Refs
     const localFolderDialog = ref(props.folderDialog);
+    const folderNameInput = ref(null);
 
     // Computed
 
@@ -67,11 +74,26 @@
 
     // Methods
     const createFolder = () => {
-        //
+        form.post(route('folders.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                closeDialog();
+                form.reset();
+                toast.add({
+                    severity: 'success',
+                    summary: 'Success Message',
+                    detail: 'Folder created successfully.',
+                    life: 3000
+                });
+            },
+            onError: () => folderNameInput.value.focus()
+        });
     }
 
     const closeDialog = () => {
         localFolderDialog.value = false;
+        form.clearErrors();
+        form.reset();
     };
 
     // Hooks

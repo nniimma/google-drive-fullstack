@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\FolderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -28,8 +29,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('/files/{folder?}', [FileController::class, 'index'])
     // ->where('folder', '(.*)')->name('files.index');
-    Route::get('/files', [FileController::class, 'index'])
-        ->name('files.index');
+    Route::get('/files', [FileController::class, 'index'])->name('files.index');
+    Route::post('/folders', [FolderController::class, 'store'])->name('folders.store');
 });
 
 require __DIR__ . '/auth.php';

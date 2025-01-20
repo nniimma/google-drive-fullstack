@@ -18,7 +18,7 @@
                     <!-- <MenuItem v-slot="{ active }"> -->
                     <MenuItem>
                     <button @click="folderDialog = true"
-                        class="text-gray-700 block px-4 py-2 text-sm">New Folder</button>
+                        class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-300 w-full">New Folder</button>
                     </MenuItem>
                 </div>
                 <div class="px-1 py-1">
@@ -43,15 +43,11 @@
     import {
         ref
     } from 'vue';
-    import {
-        useToast
-    } from 'primevue/usetoast';
     import CreateFolderModal from './CreatNewDropdown/CreateFolderModal.vue';
     // import FileUploadMenuItem from '@/Components/AuthenticationPage/Navigation/CreateNewDropDown/FileUploadMenuItem.vue'
     // import FolderUploadMenuItem from '@/Components/AuthenticationPage/Navigation/CreateNewDropDown/FolderUploadMenuItem.vue'
 
     // Uses
-    const toast = useToast();
 
     // Refs
     const folderDialog = ref(false);
