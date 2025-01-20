@@ -1,4 +1,5 @@
 <template>
+  <Head title="Files" />
     <authenticated-layout>
         hello
     </authenticated-layout>
@@ -8,6 +9,7 @@
   // Imports
   import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
   import { ref } from 'vue';
+  import { Head } from '@inertiajs/vue3';
 
   // Uses
 
