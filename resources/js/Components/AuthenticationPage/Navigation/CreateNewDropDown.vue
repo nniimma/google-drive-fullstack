@@ -17,8 +17,8 @@
                 <div class="px-1 py-1">
                     <!-- <MenuItem v-slot="{ active }"> -->
                     <MenuItem>
-                    <a href="#" @click.prevent="confirm1"
-                        class="text-gray-700 block px-4 py-2 text-sm">New Folder</a>
+                    <button @click="folderDialog = true"
+                        class="text-gray-700 block px-4 py-2 text-sm">New Folder</button>
                     </MenuItem>
                 </div>
                 <div class="px-1 py-1">
@@ -28,8 +28,8 @@
             </MenuItems>
         </transition>
     </Menu>
-    <ConfirmDialog :dismissableMask="true"></ConfirmDialog>
     <Toast />
+    <CreateFolderModal :folderDialog="folderDialog" @update-folder-dialog="folderDialog = $event" />
 </template>
 
 <script setup>
@@ -42,59 +42,25 @@
     } from '@headlessui/vue'
     import {
         ref
-    } from 'vue'
+    } from 'vue';
     import {
-        useConfirm
-    } from "primevue/useconfirm";
-    import { useToast } from 'primevue/usetoast';
+        useToast
+    } from 'primevue/usetoast';
+    import CreateFolderModal from './CreatNewDropdown/CreateFolderModal.vue';
     // import FileUploadMenuItem from '@/Components/AuthenticationPage/Navigation/CreateNewDropDown/FileUploadMenuItem.vue'
     // import FolderUploadMenuItem from '@/Components/AuthenticationPage/Navigation/CreateNewDropDown/FolderUploadMenuItem.vue'
 
     // Uses
-    const confirm = useConfirm();
     const toast = useToast();
 
     // Refs
+    const folderDialog = ref(false);
 
     // Props & Emits
 
     // Computed
 
-    // Methods
-    const confirm1 = () => {
-        confirm.require({
-            message: 'Are you sure you want to proceed?',
-            header: 'Confirmation',
-            // npm install primeicons
-            icon: 'pi pi-exclamation-triangle',
-            rejectProps: {
-                label: 'Cancel',
-                severity: 'secondary',
-                outlined: true
-            },
-            acceptProps: {
-                label: 'Save',
-                severity: 'primary',
-                outlined: true
-            },
-            accept: () => {
-                toast.add({
-                    severity: 'success',
-                    summary: 'Confirmed',
-                    detail: 'You have accepted',
-                    life: 3000
-                });
-            },
-            reject: () => {
-                toast.add({
-                    severity: 'error',
-                    summary: 'Rejected',
-                    detail: 'You have rejected',
-                    life: 3000
-                });
-            }
-        });
-    };
+    // Method
 
     // Hooks
 </script>
