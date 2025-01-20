@@ -9,7 +9,11 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import ConfirmationService from 'primevue/confirmationservice';
 import ToastService from 'primevue/toastservice';
+import ConfirmDialog from 'primevue/confirmdialog';
 import 'primeicons/primeicons.css';
+import Toast from 'primevue/toast';
+
+
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -29,6 +33,8 @@ createInertiaApp({
             })
             .use(ConfirmationService)
             .use(ToastService)
+            .component('ConfirmDialog', ConfirmDialog)
+            .component('Toast', Toast)
             .use(plugin)
             .use(ZiggyVue)
             .mount(el);

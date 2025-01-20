@@ -43,8 +43,6 @@
     import {
         ref
     } from 'vue'
-    import ConfirmDialog from 'primevue/confirmdialog';
-    import Toast from 'primevue/toast';
     import {
         useConfirm
     } from "primevue/useconfirm";
@@ -65,7 +63,6 @@
     // Methods
     const confirm1 = () => {
         confirm.require({
-            
             message: 'Are you sure you want to proceed?',
             header: 'Confirmation',
             // npm install primeicons
