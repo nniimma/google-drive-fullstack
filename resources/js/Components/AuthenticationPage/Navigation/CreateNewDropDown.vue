@@ -1,8 +1,8 @@
 <template>
     <Menu as="div" class="relative block text-left">
-            <!-- 
+        <!--
                 https://headlessui.com/
-                npm install @headlessui/vue@latest 
+                npm install @headlessui/vue@latest
             -->
         <MenuButton
             class="flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-gray-300 hover:bg-gray-500 hover:text-gray-100">
@@ -17,7 +17,8 @@
                 <div class="px-1 py-1">
                     <!-- <MenuItem v-slot="{ active }"> -->
                     <MenuItem>
-                    <a href="#" @click.prevent="showCreateFolderModal" class="text-gray-700 block px-4 py-2 text-sm">New Folder</a>
+                    <a href="#" @click.prevent="confirm1"
+                        class="text-gray-700 block px-4 py-2 text-sm">New Folder</a>
                     </MenuItem>
                 </div>
                 <div class="px-1 py-1">
@@ -27,7 +28,8 @@
             </MenuItems>
         </transition>
     </Menu>
-
+    <ConfirmDialog :dismissableMask="true"></ConfirmDialog>
+    <Toast />
 </template>
 
 <script setup>
@@ -38,23 +40,64 @@
         MenuItems,
         MenuItem
     } from '@headlessui/vue'
-    import { ref } from 'vue'
+    import {
+        ref
+    } from 'vue'
+    import ConfirmDialog from 'primevue/confirmdialog';
+    import Toast from 'primevue/toast';
+    import {
+        useConfirm
+    } from "primevue/useconfirm";
+    import { useToast } from 'primevue/usetoast';
     // import FileUploadMenuItem from '@/Components/AuthenticationPage/Navigation/CreateNewDropDown/FileUploadMenuItem.vue'
     // import FolderUploadMenuItem from '@/Components/AuthenticationPage/Navigation/CreateNewDropDown/FolderUploadMenuItem.vue'
 
     // Uses
+    const confirm = useConfirm();
+    const toast = useToast();
 
     // Refs
-    const createFolderModal = ref(false)
 
     // Props & Emits
 
     // Computed
 
     // Methods
-    function showCreateFolderModal(){
-        createFolderModal.value = true
-    }
+    const confirm1 = () => {
+        confirm.require({
+            
+            message: 'Are you sure you want to proceed?',
+            header: 'Confirmation',
+            // npm install primeicons
+            icon: 'pi pi-exclamation-triangle',
+            rejectProps: {
+                label: 'Cancel',
+                severity: 'secondary',
+                outlined: true
+            },
+            acceptProps: {
+                label: 'Save',
+                severity: 'primary',
+                outlined: true
+            },
+            accept: () => {
+                toast.add({
+                    severity: 'success',
+                    summary: 'Confirmed',
+                    detail: 'You have accepted',
+                    life: 3000
+                });
+            },
+            reject: () => {
+                toast.add({
+                    severity: 'error',
+                    summary: 'Rejected',
+                    detail: 'You have rejected',
+                    life: 3000
+                });
+            }
+        });
+    };
 
     // Hooks
 </script>
