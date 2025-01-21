@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreFolderRequest;
+use App\Http\Resources\FileResource;
 use App\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,8 @@ class FileController extends Controller
             ->orderBy('is_folder', 'desc')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
+
+        $files = FileResource::collection($files);
 
         return Inertia::render('Files/Index', compact('files'));
     }
