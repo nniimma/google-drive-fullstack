@@ -24,7 +24,7 @@
             </thead>
             <tbody>
               <tr v-for="file in props.files.data" :key="file.id" class=" border-b transition duration-300 ease-in-out hover:bg-gray-900 cursor-default">
-                <td @dblclick="openFolder(file)" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file.name }}</td>
+                <td @dblclick="openFolder(file)" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2 select-none">{{ file.name }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file.path }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file.owner }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file.updated_at }}</td>
