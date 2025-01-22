@@ -14,16 +14,15 @@
             leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
             <MenuItems
                 class="w-full absolute left-0 mt-2 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <div class="px-1 py-1">
-                    <!-- <MenuItem v-slot="{ active }"> -->
+                <div>
                     <MenuItem>
                     <button @click="folderDialog = true"
                         class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-300 w-full">New Folder</button>
                     </MenuItem>
                 </div>
-                <div class="px-1 py-1">
-                    <!-- <file-upload-menu-item/>
-                    <folder-upload-menu-item/> -->
+                <div>
+                    <file-upload-menu-item/>
+                    <folder-upload-menu-item/>
                 </div>
             </MenuItems>
         </transition>
@@ -44,8 +43,8 @@
         ref
     } from 'vue';
     import CreateFolderModal from './CreatNewDropdown/CreateFolderModal.vue';
-    // import FileUploadMenuItem from '@/Components/AuthenticationPage/Navigation/CreateNewDropDown/FileUploadMenuItem.vue'
-    // import FolderUploadMenuItem from '@/Components/AuthenticationPage/Navigation/CreateNewDropDown/FolderUploadMenuItem.vue'
+    import FileUploadMenuItem from './CreatNewDropdown/FileUploadMenuItem.vue';
+    import FolderUploadMenuItem from './CreatNewDropdown/FolderUploadMenuItem.vue';
 
     // Uses
 
