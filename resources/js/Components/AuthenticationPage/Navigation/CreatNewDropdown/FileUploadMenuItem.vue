@@ -14,6 +14,10 @@
     import {
         MenuItem
     } from "@headlessui/vue";
+    import {
+        emitter,
+        FILE_UPLOAD_STARTED
+    } from '@/event-bus';
 
     // Uses
 
@@ -24,8 +28,8 @@
     // Computed
 
     // Methods
-    function onChange(event) {
-        //
+    const onChange = (event) => {
+        emitter.emit(FILE_UPLOAD_STARTED, event.target.files);
     }
 
     // Hooks
