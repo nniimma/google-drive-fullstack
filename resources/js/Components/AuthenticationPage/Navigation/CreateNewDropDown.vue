@@ -27,7 +27,6 @@
             </MenuItems>
         </transition>
     </Menu>
-    <Toast />
     <CreateFolderModal :folderDialog="folderDialog" @update-folder-dialog="folderDialog = $event" />
 </template>
 
