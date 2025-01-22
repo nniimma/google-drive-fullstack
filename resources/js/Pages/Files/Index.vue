@@ -2,39 +2,75 @@
 
     <Head title="Files" />
     <authenticated-layout>
+        <nav class="flex items-center justify-between p-1 mb-3">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li v-for="ancestor of ancestors.data" :key="ancestor.id" class="inline-flex items-center">
+
+                    <Link v-if="!ancestor.parent_id" :href="route('files.index')"
+                        class="inline-flex items-center text-sm font-medium text-gray-700 dark:text-white hover:text-blue-100 cursor-pointer gap-1">
+                    <HomeIcon class="w-4 h-4" />
+                    My Files
+                    </Link>
+                    <div v-else class="flex items-center">
+                      <ChevronRightIcon class="w-4 h-4" />
+                      <Link :href="route('files.index', { folder: ancestor.path })"
+                      class="ml-1 text-sm font-medium text-gray-700 dark:text-white hover:text-blue-100 md:ml-2">
+                        {{ ancestor.name }}
+                        </Link>
+                    </div>
+                </li>
+            </ol>
+
+            <!-- <div class="flex">
+                <label class="mr-2 border-2 border-gray-400 rounded-md p-2">
+                    Only Favorites
+                    <checkbox @change="showOnlyFavorites" v-model:checked="onlyFavorites" />
+                </label>
+                <share-files-button :all-selected="allSelected" :selected-ids="selectedIds"/>
+                <download-files-button class="mr-2" :all="allSelected" :ids="selectedIds" />
+                <delete-files-button :delete-all="allSelected" :delete-ids="selectedIds" @delete="onDelete" />
+            </div> -->
+        </nav>
+
         <table class="min-w-full">
             <thead class="dark:bg-gray-800 border-b dark:border-gray-500 sticky top-0">
                 <tr>
                     <th class="text-sm font-medium text-gray-900 dark:text-white px-6 py-4 text-left">
-                      Name
+                        Name
                     </th>
                     <th class="text-sm font-medium text-gray-900 dark:text-white px-6 py-4 text-left">
-                      Path
+                        Path
                     </th>
                     <th class="text-sm font-medium text-gray-900 dark:text-white px-6 py-4 text-left">
-                      Owner
+                        Owner
                     </th>
                     <th class="text-sm font-medium text-gray-900 dark:text-white px-6 py-4 text-left">
-                      Last Modified
+                        Last Modified
                     </th>
                     <th class="text-sm font-medium text-gray-900 dark:text-white px-6 py-4 text-left">
-                      Size
+                        Size
                     </th>
                 </tr>
             </thead>
             <tbody>
-              <tr v-for="file in props.files.data" :key="file.id" class=" border-b transition duration-300 ease-in-out hover:bg-gray-900 cursor-default">
-                <td @dblclick="openFolder(file)" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2 select-none">{{ file.name }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file.path }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file.owner }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file.updated_at }}</td>
-                <!-- <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file.name }}</td> -->
-              </tr>
+                <tr v-for="file in files.data" :key="file.id"
+                    class=" border-b transition duration-300 ease-in-out hover:bg-gray-900 cursor-default">
+                    <td @dblclick="openFolder(file)"
+                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2 select-none">
+                        {{ file . name }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">
+                        {{ file . path }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">
+                        {{ file . owner }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">
+                        {{ file . updated_at }}</td>
+                    <!-- <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file . name }}</td> -->
+                </tr>
             </tbody>
         </table>
-        <div v-if="!props.files.data.length" class="py-8 text-center text-md text-gray-400">
-                There is no data in this folder.
-            </div>
+        <div v-if="!files.data.length" class="py-8 text-center text-md text-gray-400">
+            There is no data in this folder.
+        </div>
     </authenticated-layout>
 </template>
 
@@ -46,8 +82,14 @@
     } from 'vue';
     import {
         Head,
+        Link,
         router
     } from '@inertiajs/vue3';
+    import {
+        StarIcon as StarSolidIcon,
+        ChevronRightIcon,
+        HomeIcon
+    } from '@heroicons/vue/20/solid'
 
     // Uses
 
@@ -55,18 +97,22 @@
 
     // Props & Emits
     const props = defineProps({
-        files: Object
+        files: Object,
+        folder: Object,
+        ancestors: Object
     });
 
     // Computed
 
     // Methods
     const openFolder = (file) => {
-      if(!file.is_folder){
-        return
-      }
+        if (!file.is_folder) {
+            return
+        }
 
-      router.visit(route('files.index', {folder: file.path}))
+        router.visit(route('files.index', {
+            folder: file.path
+        }))
     }
 
     // Hooks
