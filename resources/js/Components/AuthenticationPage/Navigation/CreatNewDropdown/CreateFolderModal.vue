@@ -25,7 +25,6 @@
     import {
         ref,
         watch,
-        nextTick 
     } from 'vue';
     import InputLabel from '@/Components/InputLabel.vue';
     import TextInput from '@/Components/TextInput.vue';
@@ -33,7 +32,8 @@
     import SecondaryButton from "@/Components/SecondaryButton.vue";
     import InputError from "@/Components/InputError.vue";
     import {
-        useForm
+        useForm,
+        usePage
     } from "@inertiajs/vue3";
     import {
         useToast
@@ -42,8 +42,10 @@
     // Uses
     const form = useForm({
         name: '',
-        // parent_id: null
+        parent_id: null
     });
+
+    const page = usePage();
 
     const toast = useToast();
 
@@ -74,6 +76,7 @@
 
     // Methods
     const createFolder = () => {
+        form.parent_id = page.props.folder.id;
         form.post(route('folders.store'), {
             preserveScroll: true,
             onSuccess: () => {
