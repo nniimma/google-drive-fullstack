@@ -8,11 +8,11 @@
 
                     <Link v-if="!ancestor.parent_id" :href="route('files.index')"
                         class="inline-flex items-center text-sm font-medium text-gray-700 dark:text-white hover:text-blue-100 cursor-pointer gap-1">
-                    <HomeIcon class="w-4 h-4" />
+                    <i class="pi pi-home"></i>
                     My Files
                     </Link>
                     <div v-else class="flex items-center">
-                      <ChevronRightIcon class="w-4 h-4" />
+                      <i class="pi pi-angle-right"></i>
                       <Link :href="route('files.index', { folder: ancestor.path })"
                       class="ml-1 text-sm font-medium text-gray-700 dark:text-white hover:text-blue-100 md:ml-2">
                         {{ ancestor.name }}
@@ -87,8 +87,6 @@
     } from '@inertiajs/vue3';
     import {
         StarIcon as StarSolidIcon,
-        ChevronRightIcon,
-        HomeIcon
     } from '@heroicons/vue/20/solid'
 
     // Uses
