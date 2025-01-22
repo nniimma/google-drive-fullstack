@@ -54,7 +54,7 @@ class File extends Model
                 return;
             }
 
-            $model->path = (!$model->parent->isRoot() ? $model->parent->path . '/' : '') . Str::slug($model->name);
+            $model->path = (!$model->parent->isRoot() ? $model->parent->path : '/') . Str::slug($model->name);
         });
     }
 }

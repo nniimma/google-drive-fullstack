@@ -24,7 +24,7 @@
             </thead>
             <tbody>
               <tr v-for="file in props.files.data" :key="file.id" class=" border-b transition duration-300 ease-in-out hover:bg-gray-900 cursor-default">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file.name }}</td>
+                <td @dblclick="openFolder(file)" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file.name }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file.path }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file.owner }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file.updated_at }}</td>
@@ -32,6 +32,9 @@
               </tr>
             </tbody>
         </table>
+        <div v-if="!props.files.data.length" class="py-8 text-center text-md text-gray-400">
+                There is no data in this folder.
+            </div>
     </authenticated-layout>
 </template>
 
@@ -42,7 +45,8 @@
         ref
     } from 'vue';
     import {
-        Head
+        Head,
+        router
     } from '@inertiajs/vue3';
 
     // Uses
@@ -57,6 +61,13 @@
     // Computed
 
     // Methods
+    const openFolder = (file) => {
+      if(!file.is_folder){
+        return
+      }
+
+      router.visit(route('files.index', {folder: file.path}))
+    }
 
     // Hooks
 </script>
