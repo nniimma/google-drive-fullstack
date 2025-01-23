@@ -19,7 +19,7 @@
             </template>
         </main>
     </div>
-    <Toast/>
+    <Toast />
     <FormProgress :form="fileUploadForm" />
 </template>
 
@@ -33,11 +33,19 @@
         emitter,
         FILE_UPLOAD_STARTED
     } from '@/event-bus';
-    import { useForm, usePage } from '@inertiajs/vue3';
-    import { useToast } from 'primevue';
+    import {
+        useForm,
+        usePage
+    } from '@inertiajs/vue3';
+    import {
+        useToast
+    } from 'primevue';
     import {
         onMounted,
         ref
+    } from 'vue';
+    import {
+        onBeforeUnmount
     } from 'vue';
 
     // Uses
@@ -115,7 +123,16 @@
 
     // Hooks
     onMounted(() => {
+        // Remove any previously registered listeners
+        emitter.off(FILE_UPLOAD_STARTED, uploadFiles);
+
+        // Add the listener
         emitter.on(FILE_UPLOAD_STARTED, uploadFiles);
+    });
+
+    onBeforeUnmount(() => {
+        // Clean up the listener when the component is destroyed
+        emitter.off(FILE_UPLOAD_STARTED, uploadFiles);
     });
 </script>
 <style scoped>
