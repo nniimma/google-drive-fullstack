@@ -64,7 +64,7 @@
                         {{ file . owner }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">
                         {{ file . updated_at }}</td>
-                    <!-- <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file . name }}</td> -->
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300 gap-2">{{ file . size }}</td>
                 </tr>
             </tbody>
         </table>
