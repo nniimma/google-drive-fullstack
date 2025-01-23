@@ -42,6 +42,7 @@
 
     const fileUploadForm = useForm({
         files: [],
+        relative_paths: [],
         parent_id: null
     });
 
@@ -72,8 +73,10 @@
     }
 
     const uploadFiles = (files) => {
+        console.log(files);
         fileUploadForm.parent_id = page.props.folder.id;
         fileUploadForm.files = files;
+        fileUploadForm.relative_paths = [...files].map(file => file.webkitRelativePath);
 
         fileUploadForm.post(route('files.store'));
     }
