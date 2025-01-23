@@ -20,6 +20,7 @@
         </main>
     </div>
     <Toast/>
+    <FormProgress :form="fileUploadForm" />
 </template>
 
 <script setup>
@@ -27,6 +28,7 @@
     import Navigation from '@/Components/AuthenticationPage/Navigation.vue';
     import SearchForm from '@/Components/AuthenticationPage/SearchForm.vue';
     import UserSettingsDropdown from '@/Components/AuthenticationPage/UserSettingsDropdown.vue';
+    import FormProgress from '@/Components/AuthenticationPage/FormProgress.vue'
     import {
         emitter,
         FILE_UPLOAD_STARTED
