@@ -7,6 +7,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class FileResource extends JsonResource
 {
+    // ! to make the object not be wraped by data
+    public static $wrap = false;
     /**
      * Transform the resource into an array.
      *
