@@ -1,7 +1,6 @@
 <template>
     <div class="h-screen flex w-full gap-4">
         <Navigation />
-
         <main @drop.prevent="handleDrop" @dragover.prevent="onDragOver" @dragleave.prevent="onDragLeave"
             class="flex flex-col flex-1 px-4" :class="dragOver ? 'dropzone' : ''">
             <template v-if="dragOver">
@@ -20,6 +19,7 @@
             </template>
         </main>
     </div>
+    <Toast/>
 </template>
 
 <script setup>
@@ -32,6 +32,7 @@
         FILE_UPLOAD_STARTED
     } from '@/event-bus';
     import { useForm, usePage } from '@inertiajs/vue3';
+    import { useToast } from 'primevue';
     import {
         onMounted,
         ref
@@ -45,6 +46,8 @@
         relative_paths: [],
         parent_id: null
     });
+
+    const toast = useToast();
 
     // Refs
     const dragOver = ref(false);
@@ -73,12 +76,39 @@
     }
 
     const uploadFiles = (files) => {
-        console.log(files);
         fileUploadForm.parent_id = page.props.folder.id;
         fileUploadForm.files = files;
         fileUploadForm.relative_paths = [...files].map(file => file.webkitRelativePath);
 
-        fileUploadForm.post(route('files.store'));
+        fileUploadForm.post(route('files.store'), {
+            onSuccess: () => {
+                toast.add({
+                    severity: 'success',
+                    summary: 'Success Message',
+                    detail: `${files.length} files uploaded successfully.`,
+                    life: 3000
+                });
+            },
+            onError: errors => {
+                let message = '';
+                if (Object.keys(errors).length > 0) {
+                    message = errors[Object.keys(errors)[0]];
+                } else {
+                    message = 'Error during file upload please try again later.';
+                }
+
+                toast.add({
+                    severity: 'error',
+                    summary: 'Error Message',
+                    detail: message,
+                    life: 3000
+                });
+            },
+            onFinish: () => {
+                fileUploadForm.clearErrors();
+                fileUploadForm.reset();
+            }
+        });
     }
 
     // Hooks

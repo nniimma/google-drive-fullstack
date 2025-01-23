@@ -18,6 +18,7 @@
             </primary-button>
         </div>
     </Dialog>
+    <Toast/>
 </template>
 
 <script setup>
