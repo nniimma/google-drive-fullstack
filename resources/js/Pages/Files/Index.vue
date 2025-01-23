@@ -32,8 +32,18 @@
             </div> -->
         </nav>
 
-        <DataTable v-model:selection="selectedProduct" paginator :rows="10"
-            :rowsPerPageOptions="[5, 10, 20, 50]" :value="files.data" dataKey="id" tableStyle="min-width: 50rem;" @row-dblclick="openFolder" class="cursor-default">
+        <DataTable 
+            v-model:selection="selectedProduct" 
+            paginator 
+            :rows="10"
+            :rowsPerPageOptions="[5, 10, 20, 50]" 
+            :value="files.data" 
+            dataKey="id" 
+            tableStyle="min-width: 50rem;" 
+            @row-dblclick="openFolder" 
+            class="cursor-default"
+            scrollHeight="600px">
+
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
             <Column header="Name">
                 <template #body="slotProps">

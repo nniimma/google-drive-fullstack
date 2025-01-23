@@ -1,6 +1,6 @@
 <template>
-    <div v-if="form.progress" class="absolute bottom-[50px] right-[15px] bg-gray-200 dark:bg-gray-800 p-5 rounded-xl">
-        <p class="text-center mb-2">Uploading {{ form.files.length }} files</p>
+    <div v-if="form.progress" class="absolute bottom-[50px] right-[15px] bg-gray-200 dark:bg-gray-800 p-5 rounded-xl border dark:border-white">
+        <p class="mb-2 text-sm">Uploading {{ form.files.length }} files</p>
         <ProgressBar :value="form.progress.percentage" style="height: 10px; width: 250px;" />
     </div>
 </template>
