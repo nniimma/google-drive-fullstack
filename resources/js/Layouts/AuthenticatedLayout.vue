@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen flex w-full gap-4">
+    <div class="h-screen flex w-full gap-4 p-5">
         <Navigation />
         <main @drop.prevent="handleDrop" @dragover.prevent="onDragOver" @dragleave.prevent="onDragLeave"
             class="flex flex-col flex-1 px-4" :class="dragOver ? 'dropzone' : ''">
@@ -136,20 +136,6 @@
     });
 </script>
 <style scoped>
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.2);
-        border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background-color: #959595;
-    }
-
     .dropzone {
         width: 100%;
         height: 100%;
