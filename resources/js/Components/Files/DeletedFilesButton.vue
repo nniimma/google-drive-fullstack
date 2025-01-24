@@ -4,8 +4,6 @@
         <TrashIcon class="h-4 w-4 mr-2" />
         Delete
     </danger-button>
-    {{ deleteAll }}
-    {{ deleteIds }}
     <Toast />
     <ConfirmDialog :dismissableMask="true"></ConfirmDialog>
 </template>
