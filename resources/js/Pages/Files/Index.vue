@@ -32,17 +32,15 @@
             </div> -->
         </nav>
 
-        <DataTable 
-            v-model:selection="selectedProduct" 
-            paginator 
-            :rows="10"
-            :rowsPerPageOptions="[5, 10, 20, 50]" 
-            :value="files.data" 
-            dataKey="id" 
-            tableStyle="min-width: 50rem;" 
-            @row-dblclick="openFolder" 
-            class="cursor-default"
-            scrollHeight="600px">
+        <DataTable v-model:selection="selectedProduct" paginator :rows="10"
+            :rowsPerPageOptions="[5, 10, 20, 50]" :value="files.data" dataKey="id" tableStyle="min-width: 50rem;"
+            @row-dblclick="openFolder" class="cursor-default" scrollHeight="600px">
+
+            <template #empty>
+                <div class="p-4 text-center text-gray-500 dark:text-gray-200">
+                    There is no data in this folder.
+                </div>
+            </template>
 
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
             <Column header="Name">
@@ -58,10 +56,6 @@
             <Column field="updated_at" header="Last Modified"></Column>
             <Column field="size" header="Size"></Column>
         </DataTable>
-
-        <div v-if="!files.data.length" class="py-8 text-center text-md text-gray-400">
-            There is no data in this folder.
-        </div>
     </authenticated-layout>
 </template>
 
