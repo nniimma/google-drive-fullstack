@@ -21,20 +21,21 @@
                 </li>
             </ol>
 
-            <!-- <div class="flex">
+            <div class="flex">
                 <label class="mr-2 border-2 border-gray-400 rounded-md p-2">
                     Only Favorites
-                    <checkbox @change="showOnlyFavorites" v-model:checked="onlyFavorites" />
+                    <!-- <checkbox @change="showOnlyFavorites" v-model:checked="onlyFavorites" /> -->
                 </label>
-                <share-files-button :all-selected="allSelected" :selected-ids="selectedIds"/>
-                <download-files-button class="mr-2" :all="allSelected" :ids="selectedIds" />
-                <delete-files-button :delete-all="allSelected" :delete-ids="selectedIds" @delete="onDelete" />
-            </div> -->
+                <!-- <share-files-button :all-selected="allSelected" :selected-ids="selectedIds"/> -->
+                <!-- <download-files-button class="mr-2" :all="allSelected" :ids="selectedIds" /> -->
+                <deleted-files-button :delete-all="allSelected" :delete-ids="selectedIds" @delete="onDelete" />
+            </div>
         </nav>
 
-        <DataTable v-model:selection="selectedProduct" paginator :rows="10"
-            :rowsPerPageOptions="[5, 10, 20, 50]" :value="files.data" dataKey="id" tableStyle="min-width: 50rem;"
-            @row-dblclick="openFolder" class="cursor-default" scrollHeight="600px">
+        <DataTable v-model:selection="selectedProduct" @update:selection="handleSelectionChange" paginator
+            :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" :value="files.data" dataKey="id"
+            tableStyle="min-width: 50rem;" @row-dblclick="openFolder" class="cursor-default" scrollHeight="600px"
+            :rowClass="rowClass">
 
             <template #empty>
                 <div class="p-4 text-center text-gray-500 dark:text-gray-200">
@@ -63,6 +64,7 @@
     // Imports
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     import {
+        computed,
         ref
     } from 'vue';
     import {
@@ -76,11 +78,14 @@
     import FileIcon from '@/Components/Files/FileIcon.vue';
     import DataTable from 'primevue/datatable';
     import Column from 'primevue/column';
+    import DeletedFilesButton from '@/Components/Files/DeletedFilesButton.vue';
 
     // Uses
 
     // Refs
     const selectedProduct = ref([]);
+    const allSelected = ref(false);
+    const selectedIds = ref([]);
 
     // Props & Emits
     const props = defineProps({
@@ -100,6 +105,37 @@
         router.visit(route('files.index', {
             folder: file.data.path
         }));
+    }
+
+    const handleSelectionChange = () => {
+        allSelected.value = selectedProduct.value.length == props.files.data.length;
+
+        if (selectedProduct.value.length == 0) {
+            selectedIds.value = [];
+        }
+
+        selectedProduct.value.forEach(item => {
+            if (!selectedIds.value.includes(item.id)) {
+                selectedIds.value.push(item.id);
+            }
+
+            selectedIds.value = selectedIds.value.filter(id =>
+                selectedProduct.value.some(item => item.id === id)
+            );
+        });
+    }
+
+    const rowClass = computed(() => {
+        return (rowData) => {
+            return selectedProduct.value.some(product => product.id === rowData.id) ?
+                '!bg-gray-800' :
+                '';
+        };
+    });
+
+    function onDelete() {
+        allSelected.value = false
+        selectedProduct.value = []
     }
 
     // Hooks

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Kalnoy\Nestedset\NodeTrait;
 use Illuminate\Support\Str;
 
@@ -64,6 +65,12 @@ class File extends Model
             }
 
             $model->path = (!$model->parent->isRoot() ? $model->parent->path . '/'  : '') . Str::slug($model->name);
+        });
+
+        static::deleted(function (File $model) {
+            if (!$model->is_folder) {
+                Storage::delete($model->storage_path);
+            }
         });
     }
 }

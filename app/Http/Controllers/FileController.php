@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DestroyFileRequest;
 use App\Http\Requests\StoreFileRequest;
 use App\Http\Requests\StoreFolderRequest;
 use App\Http\Resources\FileResource;
@@ -73,6 +74,27 @@ class FileController extends Controller
                 $this->saveFile($file, $user, $parent);
             }
         }
+    }
+
+    public function destroy(DestroyFileRequest $request)
+    {
+        $data = $request->validated();
+        $parent = $request->parent;
+
+        if ($data['all']) {
+            $children = $parent->children;
+
+            foreach ($children as $child) {
+                $child->delete();
+            }
+        } else {
+            foreach ($data['ids'] ?? [] as $id) {
+                $file = File::find($id);
+                $file->delete();
+            }
+        }
+
+        return to_route('files.index', ['folder' => $parent->path]);
     }
 
     private function getRoot()
