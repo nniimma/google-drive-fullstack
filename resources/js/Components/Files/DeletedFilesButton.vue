@@ -58,14 +58,14 @@
 
     // Methods
     const onDeleteClick = () => {
-        if(!props.deleteAll && !props.deleteIds.length){
+        if (!props.deleteAll && !props.deleteIds.length) {
             toast.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: 'Please select at least one file.',
-                    life: 3000
-                });
-        }else{
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Please select at least one file.',
+                life: 3000
+            });
+        } else {
             confirm.require({
                 message: 'Are you sure you want to delete?',
                 header: 'Confirmation',
@@ -110,8 +110,13 @@
                     life: 3000
                 });
             },
-            onError: {
-
+            onError: (error) => {
+                toast.add({
+                    severity: 'error',
+                    summary: 'Error Message',
+                    detail: error,
+                    life: 3000
+                });
             }
         });
     }
