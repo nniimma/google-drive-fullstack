@@ -37,6 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/trash', [FileController::class, 'trash'])->name('files.trash');
     Route::post('/restore', [FileController::class, 'restore'])->name('files.restore');
     Route::delete('/files/delete', [FileController::class, 'destroyPermanently'])->name('files.destroyPermanently');
+    Route::post('/favorites', [FileController::class, 'addToFavorites'])->name('files.favorites');
 });
 
 require __DIR__ . '/auth.php';

@@ -6,8 +6,11 @@ use App\Http\Requests\ActionFileRequest;
 use App\Http\Requests\StoreFileRequest;
 use App\Http\Requests\StoreFolderRequest;
 use App\Http\Requests\TrashFilesRequest;
+use App\Http\Requests\UpdateFavoriteRequest;
 use App\Http\Resources\FileResource;
 use App\Models\File;
+use App\Models\StarredFile;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -29,10 +32,12 @@ class FileController extends Controller
         }
 
         $files = File::query()
+            ->with('starred')
             ->where('parent_id', $folder->id)
             ->where('created_by', Auth::id())
             ->orderBy('is_folder', 'desc')
             ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->get();
 
         $files = FileResource::collection($files);
@@ -258,6 +263,7 @@ class FileController extends Controller
             $children = File::onlyTrashed()->get();
 
             foreach ($children as $child) {
+                StarredFile::where('file_id', $child->id)->delete();
                 $child->DeletePermanently();
             }
         } else {
@@ -270,5 +276,42 @@ class FileController extends Controller
         }
 
         return to_route('files.trash');
+    }
+
+    public function addToFavorites(UpdateFavoriteRequest $request)
+    {
+        $parent = File::query()
+            ->where('id', $request->parent_id)
+            ->first();;
+        $data = $request->validated();
+        $id = $data['id'];
+
+        if (empty($id)) {
+            return ['message' => 'Please select files to add to favorite.'];
+        }
+
+        $file = File::find($id);
+        $user_id = Auth::id();
+        $starredFile = StarredFile::query()
+            ->where('file_id', $file->id)
+            ->where('user_id', $user_id)
+            ->first();
+
+        if ($starredFile) {
+            $starredFile->delete();
+            $stared = 0;
+        } else {
+            StarredFile::create([
+                'file_id' => $file->id,
+                'user_id' => $user_id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            $stared = 1;
+        }
+        return to_route('files.index', [
+            'folder' => $parent->path,
+            'stared' => $stared
+        ]);
     }
 }

@@ -98,4 +98,9 @@ class File extends Model
             }
         }
     }
+
+    public function starred()
+    {
+        return $this->hasOne(StarredFile::class, 'file_id', 'id')->where('user_id', Auth::id());
+    }
 }

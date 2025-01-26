@@ -44,6 +44,15 @@
             </template>
 
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+            <Column header="Favorite" style="width:20px">
+                <template #body="slotProps">
+                    <div class="flex gap-2" @click.stop.prevent="addRemoveFavorite(slotProps.data)">
+                        <i class="pi pi-star-o"></i>
+                        <StarSolidIcon v-if="slotProps.data.is_favourite" class="w-5 h-5" />
+                        <StarOutlineIcon v-else class="w-5 h-5" />
+                    </div>
+                </template>
+            </Column>
             <Column header="Name">
                 <template #body="slotProps">
                     <div class="flex gap-2">
@@ -58,6 +67,7 @@
             <Column field="size" header="Size"></Column>
         </DataTable>
     </authenticated-layout>
+    <Toast />
 </template>
 
 <script setup>
@@ -70,18 +80,33 @@
     import {
         Head,
         Link,
-        router
+        router,
+        useForm,
+        usePage
     } from '@inertiajs/vue3';
     import {
         StarIcon as StarSolidIcon,
-    } from '@heroicons/vue/20/solid'
+    } from '@heroicons/vue/20/solid';
+    import {
+        StarIcon as StarOutlineIcon
+    } from '@heroicons/vue/24/outline'
     import FileIcon from '@/Components/Files/FileIcon.vue';
     import DataTable from 'primevue/datatable';
     import Column from 'primevue/column';
     import DeletedFilesButton from '@/Components/Files/DeletedFilesButton.vue';
     import DownloadFilesButton from '@/Components/Files/DownloadFilesButton.vue';
+    import {
+        useToast
+    } from 'primevue';
 
     // Uses
+    const toast = useToast();
+    const page = usePage();
+    const form = useForm({
+        id: null,
+        parent_id: null
+    });
+
 
     // Refs
     const selectedProduct = ref([]);
@@ -135,8 +160,43 @@
     });
 
     function onDelete() {
-        allSelected.value = false
-        selectedProduct.value = []
+        allSelected.value = false;
+        selectedProduct.value = [];
+    }
+
+    function addRemoveFavorite(file) {
+        form.id = file.id;
+        form.parent_id = page.props.folder.id;
+        form.post(route('files.favorites'), {
+            onSuccess: () => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const stared = urlParams.get('stared');
+                form.reset();
+                if (stared == 0) {
+                    toast.add({
+                        severity: 'success',
+                        summary: 'Success Message',
+                        detail: 'File have been removed from favorite successfully.',
+                        life: 3000
+                    });
+                } else {
+                    toast.add({
+                        severity: 'success',
+                        summary: 'Success Message',
+                        detail: 'File have been saved to favorite successfully.',
+                        life: 3000
+                    });
+                }
+            },
+            onError: (error) => {
+                toast.add({
+                    severity: 'error',
+                    summary: 'Error Message',
+                    detail: error,
+                    life: 3000
+                });
+            }
+        });
     }
 
     // Hooks
