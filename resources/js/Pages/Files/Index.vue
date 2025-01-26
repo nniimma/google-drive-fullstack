@@ -27,7 +27,7 @@
                     <!-- <checkbox @change="showOnlyFavorites" v-model:checked="onlyFavorites" /> -->
                 </label>
                 <!-- <share-files-button :all-selected="allSelected" :selected-ids="selectedIds"/> -->
-                <!-- <download-files-button class="mr-2" :all="allSelected" :ids="selectedIds" /> -->
+                <download-files-button class="mr-2" :all="allSelected" :ids="selectedIds" />
                 <deleted-files-button :delete-all="allSelected" :delete-ids="selectedIds" @delete="onDelete" />
             </div>
         </nav>
@@ -79,6 +79,7 @@
     import DataTable from 'primevue/datatable';
     import Column from 'primevue/column';
     import DeletedFilesButton from '@/Components/Files/DeletedFilesButton.vue';
+    import DownloadFilesButton from '@/Components/Files/DownloadFilesButton.vue';
 
     // Uses
 

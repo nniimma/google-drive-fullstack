@@ -33,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/folders', [FileController::class, 'storeFolder'])->name('folders.store');
     Route::post('/files', [FileController::class, 'storeFile'])->name('files.store');
     Route::delete('/files', [FileController::class, 'destroy'])->name('files.destroy');
+    Route::get('/file/download', [FileController::class, 'download'])->name('files.download');
 });
 
 require __DIR__ . '/auth.php';

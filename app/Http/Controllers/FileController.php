@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DestroyFileRequest;
+use App\Http\Requests\ActionFileRequest;
 use App\Http\Requests\StoreFileRequest;
 use App\Http\Requests\StoreFolderRequest;
 use App\Http\Resources\FileResource;
 use App\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class FileController extends Controller
 {
@@ -76,7 +78,7 @@ class FileController extends Controller
         }
     }
 
-    public function destroy(DestroyFileRequest $request)
+    public function destroy(ActionFileRequest $request)
     {
         $data = $request->validated();
         $parent = $request->parent;
@@ -95,6 +97,61 @@ class FileController extends Controller
         }
 
         return to_route('files.index', ['folder' => $parent->path]);
+    }
+
+    public function download(ActionFileRequest $request)
+    {
+        //need this code to link the storage to the public folder
+        // php artisan storage:link
+        $data = $request->validated();
+        $parent = $request->parent;
+
+        $all = $data['all'] ?? false;
+        $ids = $data['ids'] ?? [];
+
+        if ($all) {
+            $url = $this->createZip($parent->children);
+            $fileName = $parent->name . '.zip';
+        } else {
+            [$url, $fileName] = $this->getDownloadUrl($ids, $parent->name);
+        }
+
+        return [
+            'url' => $url,
+            'fileName' => $fileName,
+        ];
+    }
+
+    public function createZip($files): string
+    {
+        $zipPath = 'zip/' . Str::random() . '.zip';
+        $publicPath = "public/$zipPath";
+
+        if (!is_dir(dirname($publicPath))) {
+            Storage::makeDirectory(dirname($publicPath));
+        }
+
+        $zipFile = Storage::path($publicPath);
+        //! to use zip we need to uncomment the ;extension=zip inside php.ini
+        $zip = new \ZipArchive();
+        if ($zip->open($zipFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) == true) {
+            $this->addFilesToZip($zip, $files);
+        }
+
+        $zip->close();
+
+        return asset(Storage::url($zipPath));
+    }
+
+    private function addFilesToZip($zip, $files, $ancestors = '')
+    {
+        foreach ($files as $file) {
+            if ($file->is_folder) {
+                $this->addFilesToZip($zip, $file->children, $ancestors . $file->name . '/');
+            } else {
+                $zip->addFile(Storage::path($file->storage_path), $ancestors . $file->name);
+            }
+        }
     }
 
     private function getRoot()
@@ -128,5 +185,32 @@ class FileController extends Controller
         $model->mime = $file->getMimeType();
         $model->size = $file->getSize();
         $parent->appendNode($model);
+    }
+
+    private function getDownloadUrl(array $ids, $zipName)
+    {
+        if (count($ids) === 1) {
+            $file = File::find($ids[0]);
+            if ($file->is_folder) {
+                if ($file->children->count() === 0) {
+                    throw new \Exception('The folder is empty.');
+                }
+                $url = $this->createZip($file->children);
+                $fileName = $file->name . '.zip';
+            } else {
+                $destination = 'public/' . pathinfo($file->storage_path, PATHINFO_BASENAME);
+                Storage::copy($file->storage_path, $destination);
+
+                $url = asset(Storage::url($destination));
+                $fileName = $file->name;
+            }
+        } else {
+            $files = File::query()->whereIn('id', $ids)->get();
+            $url = $this->createZip($files);
+
+            $fileName = $zipName . '.zip';
+        }
+
+        return [$url, $fileName];
     }
 }
