@@ -48,8 +48,8 @@
                 <template #body="slotProps">
                     <div class="flex gap-2" @click.stop.prevent="addRemoveFavorite(slotProps.data)">
                         <i class="pi pi-star-o"></i>
-                        <StarSolidIcon v-if="slotProps.data.is_favourite" class="w-5 h-5" />
-                        <StarOutlineIcon v-else class="w-5 h-5" />
+                        <StarSolidIcon v-if="slotProps.data.is_favourite" class="w-5 h-5 cursor-pointer" />
+                        <StarOutlineIcon v-else class="w-5 h-5 cursor-pointer" />
                     </div>
                 </template>
             </Column>
