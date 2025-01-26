@@ -11,7 +11,7 @@
                 <nav-link :href="route('files.index')" :active="$page.props.auth.route_name == 'files.index'">My Files</nav-link>
                 <NavLink :href="route('dashboard')" :active="$page.props.auth.route_name == 'files.sharedWithMe'">Shared with me</NavLink>
                 <NavLink :href="route('dashboard')" :active="$page.props.auth.route_name == 'files.sharedByMe'">Shared by me</NavLink>
-                <nav-link :href="route('dashboard')" :active="$page.props.auth.route_name == 'trash'">Trash</nav-link>
+                <nav-link :href="route('files.trash')" :active="$page.props.auth.route_name == 'files.trash'">Trash</nav-link>
             </div>
          </div>
     </nav>

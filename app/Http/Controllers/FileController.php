@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ActionFileRequest;
 use App\Http\Requests\StoreFileRequest;
 use App\Http\Requests\StoreFolderRequest;
+use App\Http\Requests\TrashFilesRequest;
 use App\Http\Resources\FileResource;
 use App\Models\File;
 use Illuminate\Http\Request;
@@ -87,12 +88,12 @@ class FileController extends Controller
             $children = $parent->children;
 
             foreach ($children as $child) {
-                $child->delete();
+                $child->moveToTrash();
             }
         } else {
             foreach ($data['ids'] ?? [] as $id) {
                 $file = File::find($id);
-                $file->delete();
+                $file->moveToTrash();
             }
         }
 
@@ -212,5 +213,39 @@ class FileController extends Controller
         }
 
         return [$url, $fileName];
+    }
+
+    public function trash(Request $request)
+    {
+        $files = File::onlyTrashed()->where('created_by', Auth::id())
+            ->orderBy('is_folder', 'DESC')
+            ->orderBy('deleted_at', 'DESC')
+            ->paginate(10);
+
+        $files = FileResource::collection($files);
+
+        return Inertia::render('Files/Trash', compact('files'));
+    }
+
+    public function restore(TrashFilesRequest $request)
+    {
+        $data = $request->validated();
+
+        if ($data['all']) {
+            $children = File::onlyTrashed()->get();
+
+            foreach ($children as $child) {
+                $child->restore();
+            }
+        } else {
+            $ids = $data['ids'] ?? [];
+            $children = File::onlyTrashed()->whereIn('id', $ids)->get();
+
+            foreach ($children as $child) {
+                $child->restore();
+            }
+        }
+
+        return to_route('files.trash');
     }
 }
