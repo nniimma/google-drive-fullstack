@@ -28,7 +28,8 @@ class FileController extends Controller
             $folder = $this->getRoot();
         }
 
-        $files = File::query()->where('parent_id', $folder->id)
+        $files = File::query()
+            ->where('parent_id', $folder->id)
             ->where('created_by', Auth::id())
             ->orderBy('is_folder', 'desc')
             ->orderBy('created_at', 'desc')
@@ -220,7 +221,7 @@ class FileController extends Controller
         $files = File::onlyTrashed()->where('created_by', Auth::id())
             ->orderBy('is_folder', 'DESC')
             ->orderBy('deleted_at', 'DESC')
-            ->paginate(10);
+            ->get();
 
         $files = FileResource::collection($files);
 
