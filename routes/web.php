@@ -36,6 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/file/download', [FileController::class, 'download'])->name('files.download');
     Route::get('/trash', [FileController::class, 'trash'])->name('files.trash');
     Route::post('/restore', [FileController::class, 'restore'])->name('files.restore');
+    Route::delete('/files/delete', [FileController::class, 'destroyPermanently'])->name('files.destroyPermanently');
 });
 
 require __DIR__ . '/auth.php';

@@ -6,6 +6,7 @@
         <nav class="flex items-center justify-end p-1 mb-3">
             <div class="flex">
                 <restore-files-button :all-selected="allSelected" :selectedIds="selectedIds" @restore="onRestore"/>
+                <delete-permanently-button :all-selected="allSelected" :selectedIds="selectedIds" @delete="onDelete"/>
             </div>
         </nav>
         <div class="flex-1 overflow-auto">
@@ -44,6 +45,7 @@
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     import FileIcon from '@/Components/Files/FileIcon.vue';
     import RestoreFilesButton from '@/Components/Files/RestoreFilesButton.vue';
+    import DeletePermanentlyButton from '@/Components/Files/DeletePermanentlyButton.vue';
     import {
         computed,
         ref
@@ -92,6 +94,12 @@
     }
 
     const onRestore = () => {
+        allSelected.value = false;
+        selectedIds.value = [];
+        selectedProduct.value = [];
+    }
+
+    function onDelete(){
         allSelected.value = false;
         selectedIds.value = [];
         selectedProduct.value = [];
