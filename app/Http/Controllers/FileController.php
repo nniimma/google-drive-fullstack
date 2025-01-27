@@ -28,6 +28,8 @@ class FileController extends Controller
 {
     public function index(Request $request, string $folder = null)
     {
+        $search = $request->get('search');
+
         if ($folder) {
             $folder = File::query()->where('created_by', Auth::id())
                 ->where('path', $folder)
@@ -43,11 +45,17 @@ class FileController extends Controller
         $query = File::query()
             ->select('files.*')
             ->with('starred')
-            ->where('parent_id', $folder->id)
             ->where('created_by', Auth::id())
+            ->where('_lft', '!=', 1)
             ->orderBy('is_folder', 'desc')
             ->orderBy('files.created_at', 'desc')
             ->orderBy('files.id', 'desc');
+
+        if ($search) {
+            $query->where('name', 'like', "%$search%");
+        } else {
+            $query->where('parent_id', $folder->id);
+        }
 
         if ($favorites === 1) {
             $query->join('starred_files', 'starred_files.file_id', '=', 'files.id')
@@ -239,10 +247,17 @@ class FileController extends Controller
 
     public function trash(Request $request)
     {
-        $files = File::onlyTrashed()->where('created_by', Auth::id())
+        $search = $request->get('search');
+
+        $query = File::onlyTrashed()->where('created_by', Auth::id())
             ->orderBy('is_folder', 'DESC')
-            ->orderBy('deleted_at', 'DESC')
-            ->get();
+            ->orderBy('deleted_at', 'DESC');
+
+        if ($search) {
+            $query->where('name', 'like', "%$search%");
+        }
+
+        $files = $query->get();
 
         $files = FileResource::collection($files);
 
@@ -371,7 +386,14 @@ class FileController extends Controller
 
     public function sharedWithMe(Request $request)
     {
-        $files = File::getSharedWithMe()->get();
+        $search = $request->get('search');
+        $query = File::getSharedWithMe();
+
+        if ($search) {
+            $query->where('name', 'like', "%$search%");
+        }
+
+        $files = $query->get();
 
         $files = FileResource::collection($files);
 
@@ -384,7 +406,14 @@ class FileController extends Controller
 
     public function sharedByMe(Request $request)
     {
-        $files = File::getSharedByMe()->get();
+        $search = $request->get('search');
+        $query = File::getSharedByMe();
+
+        if ($search) {
+            $query->where('name', 'like', "%$search%");
+        }
+
+        $files = $query->get();
 
         $files = FileResource::collection($files);
 

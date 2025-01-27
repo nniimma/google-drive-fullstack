@@ -101,6 +101,7 @@
     } from 'primevue';
     import Checkbox from '@/Components/Checkbox.vue';
     import ShareFilesButton from '@/Components/Files/ShareFilesButton.vue';
+import { emitter, ON_SEARCH } from '@/event-bus';
 
     // Uses
     const toast = useToast();
@@ -116,6 +117,7 @@
     const allSelected = ref(false);
     const selectedIds = ref([]);
     const onlyFavorites = ref(false)
+    const search = ref('');
     let params = null
 
     // Props & Emits
@@ -217,6 +219,11 @@
     onMounted(() => {
         params = new URLSearchParams(window.location.search)
         onlyFavorites.value = params.get('favorites') === '1'
+
+        search.value = params.get('search')
+        emitter.on(ON_SEARCH, (value) => {
+            search.value = value
+        })
     });
 </script>
 
