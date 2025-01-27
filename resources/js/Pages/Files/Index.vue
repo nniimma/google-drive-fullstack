@@ -26,7 +26,7 @@
                     Only Favorites
                     <Checkbox @change="showOnlyFavorites" v-model:checked="onlyFavorites" />
                 </label>
-                <!-- <share-files-button :all-selected="allSelected" :selected-ids="selectedIds"/> -->
+                <share-files-button :all-selected="allSelected" :selected-ids="selectedIds"/>
                 <download-files-button class="mr-2" :all="allSelected" :ids="selectedIds" />
                 <deleted-files-button :delete-all="allSelected" :delete-ids="selectedIds" @delete="onDelete" />
             </div>
@@ -100,6 +100,7 @@
         useToast
     } from 'primevue';
     import Checkbox from '@/Components/Checkbox.vue';
+    import ShareFilesButton from '@/Components/Files/ShareFilesButton.vue';
 
     // Uses
     const toast = useToast();
