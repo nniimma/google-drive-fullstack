@@ -39,6 +39,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/files/delete', [FileController::class, 'destroyPermanently'])->name('files.destroyPermanently');
     Route::post('/favorites', [FileController::class, 'addToFavorites'])->name('files.favorites');
     Route::post('/files/share', [FileController::class, 'share'])->name('files.share');
+    Route::get('/file/shared/with', [FileController::class, 'sharedWithMe'])->name('files.sharedWithMe');
+    Route::get('/file/shared/by', [FileController::class, 'sharedByMe'])->name('files.sharedByMe');
 });
 
 require __DIR__ . '/auth.php';

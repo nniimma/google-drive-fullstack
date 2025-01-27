@@ -9,8 +9,8 @@
             <CreateNewDropDown/>
             <div class="py-3 mt-5 p-2 rounded border border-gray-300">
                 <nav-link :href="route('files.index')" :active="$page.props.auth.route_name == 'files.index'">My Files</nav-link>
-                <NavLink :href="route('dashboard')" :active="$page.props.auth.route_name == 'files.sharedWithMe'">Shared with me</NavLink>
-                <NavLink :href="route('dashboard')" :active="$page.props.auth.route_name == 'files.sharedByMe'">Shared by me</NavLink>
+                <NavLink :href="route('files.sharedWithMe')" :active="$page.props.auth.route_name == 'files.sharedWithMe'">Shared with me</NavLink>
+                <NavLink :href="route('files.sharedByMe')" :active="$page.props.auth.route_name == 'files.sharedByMe'">Shared by me</NavLink>
                 <nav-link :href="route('files.trash')" :active="$page.props.auth.route_name == 'files.trash'">Trash</nav-link>
             </div>
          </div>
