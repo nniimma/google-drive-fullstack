@@ -9,6 +9,7 @@ use App\Http\Requests\StoreFolderRequest;
 use App\Http\Requests\TrashFilesRequest;
 use App\Http\Requests\UpdateFavoriteRequest;
 use App\Http\Resources\FileResource;
+use App\Mail\ShareFilesMail;
 use App\Models\File;
 use App\Models\FileShare;
 use App\Models\StarredFile;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Mail;
 
 class FileController extends Controller
 {
@@ -361,7 +363,7 @@ class FileController extends Controller
 
         FileShare::insert($data);
 
-        //todo: send an email
+        Mail::to($user)->send(new ShareFilesMail($user, Auth::user(), $files));
 
         return redirect()->back();
     }
