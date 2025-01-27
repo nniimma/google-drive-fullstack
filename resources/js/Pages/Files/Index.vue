@@ -22,9 +22,9 @@
             </ol>
 
             <div class="flex">
-                <label class="mr-2 border-2 border-gray-400 rounded-md p-2">
+                <label class="mr-2 border-2 border-gray-400 rounded-md p-2 cursor-pointer">
                     Only Favorites
-                    <!-- <checkbox @change="showOnlyFavorites" v-model:checked="onlyFavorites" /> -->
+                    <Checkbox @change="showOnlyFavorites" v-model:checked="onlyFavorites" />
                 </label>
                 <!-- <share-files-button :all-selected="allSelected" :selected-ids="selectedIds"/> -->
                 <download-files-button class="mr-2" :all="allSelected" :ids="selectedIds" />
@@ -75,6 +75,7 @@
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     import {
         computed,
+        onMounted,
         ref
     } from 'vue';
     import {
@@ -98,6 +99,7 @@
     import {
         useToast
     } from 'primevue';
+    import Checkbox from '@/Components/Checkbox.vue';
 
     // Uses
     const toast = useToast();
@@ -112,6 +114,8 @@
     const selectedProduct = ref([]);
     const allSelected = ref(false);
     const selectedIds = ref([]);
+    const onlyFavorites = ref(false)
+    let params = null
 
     // Props & Emits
     const props = defineProps({
@@ -199,7 +203,20 @@
         });
     }
 
+    function showOnlyFavorites() {
+        if(onlyFavorites.value){
+            params.set('favorites', 1)
+        }else{
+            params.delete('favorites')
+        }
+        router.get(window.location.pathname + '?' + params.toString())
+    }
+
     // Hooks
+    onMounted(() => {
+        params = new URLSearchParams(window.location.search)
+        onlyFavorites.value = params.get('favorites') === '1'
+    });
 </script>
 
 <style scoped>
