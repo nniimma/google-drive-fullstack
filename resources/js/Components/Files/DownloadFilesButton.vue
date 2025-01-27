@@ -38,8 +38,8 @@
             type: Array,
             required: false
         },
-        // sharedWithMe: false,
-        // sharedByMe: false
+        sharedWithMe: false,
+        sharedByMe: false
     });
 
     // Computed
@@ -69,11 +69,11 @@
         }
 
         let url = route('files.download');
-        // if (props.sharedWithMe) {
-        //     url = route('files.downloadSharedWithMe');
-        // } else if (props.sharedByMe) {
-        //     url = route('files.downloadSharedByMe');
-        // }
+        if (props.sharedWithMe) {
+            url = route('files.downloadSharedWithMe');
+        } else if (props.sharedByMe) {
+            url = route('files.downloadSharedByMe');
+        }
 
         httpGet(url + '?' + p.toString()).then(response => {
             if (response.message) {

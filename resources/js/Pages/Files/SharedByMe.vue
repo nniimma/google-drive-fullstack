@@ -5,6 +5,7 @@
     <AuthenticatedLayout>
         <nav class="flex items-center justify-end p-1 mb-3">
             <div class="flex">
+                <download-files-button class="mr-2" :all="allSelected" :ids="selectedIds" :shared-by-me="true"/>
             </div>
         </nav>
         <div class="flex-1 overflow-auto">
@@ -49,6 +50,7 @@
     } from 'vue';
     import DataTable from 'primevue/datatable';
     import Column from 'primevue/column';
+    import DownloadFilesButton from '@/Components/Files/DownloadFilesButton.vue';
 
     // Uses
 
