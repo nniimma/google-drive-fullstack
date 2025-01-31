@@ -21,10 +21,12 @@
     "dependencies": {
         "@headlessui/vue": "1.7",
         "@heroicons/vue": "^2.2.0",
+        "@primevue/forms": "^4.2.5",
         "@primevue/themes": "^4.2.5",
         "mitt": "^3.0.1",
         "primeicons": "^7.0.0",
         "primevue": "^4.2.5",
-        "vue-router": "^4.5.0"
+        "vue-router": "^4.5.0",
+        "zod": "^3.24.1"
     }
 }
